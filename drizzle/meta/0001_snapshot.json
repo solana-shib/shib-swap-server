@@ -1,0 +1,332 @@
+{
+  "id": "718c1f92-ee3b-4c9a-9790-0787618639d8",
+  "prevId": "ed64effe-a61e-4dfb-abe9-8879a43f7b25",
+  "version": "5",
+  "dialect": "pg",
+  "tables": {
+    "catpoints_rewards": {
+      "name": "catpoints_rewards",
+      "schema": "",
+      "columns": {
+        "swap_tx_signature": {
+          "name": "swap_tx_signature",
+          "type": "varchar(90)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "tx_signature": {
+          "name": "tx_signature",
+          "type": "varchar(90)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "error_reason": {
+          "name": "error_reason",
+          "type": "catpoint_reward_error_reason",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "catpoint_reward_status",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'PENDING'"
+        },
+        "amount": {
+          "name": "amount",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "swap_requests": {
+      "name": "swap_requests",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "tx_signature": {
+          "name": "tx_signature",
+          "type": "varchar(90)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "address": {
+          "name": "address",
+          "type": "varchar(44)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "token_from_address": {
+          "name": "token_from_address",
+          "type": "varchar(44)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "token_to_address": {
+          "name": "token_to_address",
+          "type": "varchar(44)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "amount_from": {
+          "name": "amount_from",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "amount_to": {
+          "name": "amount_to",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "swap_requests_address_users_address_fk": {
+          "name": "swap_requests_address_users_address_fk",
+          "tableFrom": "swap_requests",
+          "tableTo": "users",
+          "columnsFrom": ["address"],
+          "columnsTo": ["address"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "swap_requests_token_from_address_tokens_address_fk": {
+          "name": "swap_requests_token_from_address_tokens_address_fk",
+          "tableFrom": "swap_requests",
+          "tableTo": "tokens",
+          "columnsFrom": ["token_from_address"],
+          "columnsTo": ["address"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "swap_requests_token_to_address_tokens_address_fk": {
+          "name": "swap_requests_token_to_address_tokens_address_fk",
+          "tableFrom": "swap_requests",
+          "tableTo": "tokens",
+          "columnsFrom": ["token_to_address"],
+          "columnsTo": ["address"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "swap_requests_tx_signature_unique": {
+          "name": "swap_requests_tx_signature_unique",
+          "nullsNotDistinct": false,
+          "columns": ["tx_signature"]
+        }
+      }
+    },
+    "token_list_revalidations": {
+      "name": "token_list_revalidations",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "swap_request_tx_signature": {
+          "name": "swap_request_tx_signature",
+          "type": "varchar(90)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fetched_tokens_count": {
+          "name": "fetched_tokens_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "added_tokens_count": {
+          "name": "added_tokens_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "removed_tokens_count": {
+          "name": "removed_tokens_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "token_list_revalidations_swap_request_tx_signature_swap_requests_tx_signature_fk": {
+          "name": "token_list_revalidations_swap_request_tx_signature_swap_requests_tx_signature_fk",
+          "tableFrom": "token_list_revalidations",
+          "tableTo": "swap_requests",
+          "columnsFrom": ["swap_request_tx_signature"],
+          "columnsTo": ["tx_signature"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "token_list_revalidations_swap_request_tx_signature_unique": {
+          "name": "token_list_revalidations_swap_request_tx_signature_unique",
+          "nullsNotDistinct": false,
+          "columns": ["swap_request_tx_signature"]
+        }
+      }
+    },
+    "tokens": {
+      "name": "tokens",
+      "schema": "",
+      "columns": {
+        "address": {
+          "name": "address",
+          "type": "varchar(44)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "chain_id": {
+          "name": "chain_id",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "decimals": {
+          "name": "decimals",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "symbol": {
+          "name": "symbol",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "logo_url": {
+          "name": "logo_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tags": {
+          "name": "tags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": []
+        },
+        "extensions": {
+          "name": "extensions",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "removed": {
+          "name": "removed",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "users": {
+      "name": "users",
+      "schema": "",
+      "columns": {
+        "address": {
+          "name": "address",
+          "type": "varchar(44)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    }
+  },
+  "enums": {
+    "catpoint_reward_error_reason": {
+      "name": "catpoint_reward_error_reason",
+      "values": {
+        "MAX_RETRIES_EXCEEDED": "MAX_RETRIES_EXCEEDED"
+      }
+    },
+    "catpoint_reward_status": {
+      "name": "catpoint_reward_status",
+      "values": {
+        "PENDING": "PENDING",
+        "SUCCESSFUL": "SUCCESSFUL",
+        "ERROR": "ERROR"
+      }
+    }
+  },
+  "schemas": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

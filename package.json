@@ -1,0 +1,47 @@
+{
+  "name": "shib-swap-server",
+  "packageManager": "yarn@4.1.1",
+  "type": "module",
+  "scripts": {
+    "dev": "tsup --watch",
+    "build": "tsup ./src/*",
+    "db:update": "drizzle-kit generate:pg",
+    "start:fly": "yarn db:migrate && node dist/index.cjs",
+    "db:migrate": "node ./migrator",
+    "db:um": "yarn db:update && yarn db:migrate",
+    "lint:fix": "eslint --fix src --ext ts"
+  },
+  "dependencies": {
+    "@fastify/cors": "^9.0.1",
+    "@fastify/swagger": "^8.14.0",
+    "@fastify/swagger-ui": "^2.1.0",
+    "@jup-ag/dca-sdk": "^3.0.0-beta.0",
+    "@jup-ag/referral-sdk": "^0.1.6",
+    "@solana/spl-token": "^0.4.1",
+    "@solana/web3.js": "^1.90.0",
+    "bs58": "^5.0.0",
+    "decimal.js": "^10.4.3",
+    "dotenv": "^16.4.1",
+    "fastify": "^4.26.0",
+    "fastify-plugin": "^4.5.1",
+    "fastify-type-provider-zod": "^1.1.9",
+    "glob": "^10.3.10",
+    "ioredis": "^5.3.2",
+    "lodash": "^4.17.21",
+    "pino": "^8.18.0",
+    "typescript": "^5.3.3",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@inc-dev/eslint-config": "^1.1.5",
+    "@types/lodash": "^4.14.202",
+    "@types/node": "^20.11.16",
+    "@types/pg": "^8.11.0",
+    "drizzle-kit": "^0.20.14",
+    "drizzle-orm": "^0.29.3",
+    "eslint": "^8.56.0",
+    "pg": "^8.11.3",
+    "pino-pretty": "^10.3.1",
+    "tsup": "^8.0.1"
+  }
+}

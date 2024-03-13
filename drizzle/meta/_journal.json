@@ -1,0 +1,20 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1707506039445,
+      "tag": "0000_kind_kree",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1709753040657,
+      "tag": "0001_past_slapstick",
+      "breakpoints": true
+    }
+  ]
+}

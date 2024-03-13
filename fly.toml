@@ -1,0 +1,26 @@
+# fly.toml app configuration file generated for shib-swap-api on 2024-03-12T17:02:55+02:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'shib-swap-api'
+primary_region = 'waw'
+
+[build]
+
+[env]
+  HOST = '0.0.0.0'
+  PORT = '3000'
+
+[http_service]
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 1
+  processes = ['app']
+
+[[vm]]
+  memory = '512mb'
+  cpu_kind = 'shared'
+  cpus = 1
